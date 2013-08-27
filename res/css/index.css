@@ -1,18 +1,19 @@
-html{
-    background: url("../images/background/grainyWhiteBlue.jpg") no-repeat center center fixed;
+body{
+    background: url("../images/background/grainyGray.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
 }
 
-div.header{
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    background: rgba(255, 255, 255, .2);
+.navbar-inverse .navbar-inner {
+    background-image: url("../images/grainyNavBar.jpg");
 }
 
-div.content{
+body > .navbar .brand {
+    font-weight: bold;
+    color: #000;
+    text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
 }
