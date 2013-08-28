@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" name="Default" comment="bootstrap framework initialization and implementation">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/js/holder.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/DaVinci.iml" afterPath="$PROJECT_DIR$/.idea/DaVinci.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/css/index.css" afterPath="$PROJECT_DIR$/res/css/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/index.html" afterPath="$PROJECT_DIR$/src/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DaVinci.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/index.html" changelist="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" time="1377703823165" ignored="false" />
     <file path="/index.css" changelist="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" time="1377702668788" ignored="false" />
-    <file path="/Dummy.txt" changelist="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" time="1377692889669" ignored="false" />
+    <file path="/Dummy.txt" changelist="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" time="1377703996171" ignored="false" />
     <file path="/second.html" changelist="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" time="1377611016247" ignored="false" />
     <file path="/about.html" changelist="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" time="1377611800193" ignored="false" />
     <file path="/creator.html" changelist="8d53f8fc-5ba0-4779-9d8a-438d11015b0d" time="1377611732401" ignored="false" />
@@ -337,7 +329,11 @@
       <created>1377611959186</created>
       <updated>1377611959186</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="navbar first commit">
+      <created>1377704004052</created>
+      <updated>1377704004052</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -413,7 +409,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="bootstrap framework initialization and implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="navbar first commit" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -428,6 +424,7 @@
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
     <MESSAGE value="bootstrap framework initialization and implementation" />
+    <MESSAGE value="navbar first commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
