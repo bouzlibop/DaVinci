@@ -1,19 +1,37 @@
+
+
+/* GENERAL
+   ----------------------------------------------------------- */
 body{
-    background: url("../images/background/grainyGray.jpg") no-repeat center center fixed;
+    background: url("../images/background/grainyDarkGray.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-
-    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
 }
 
-.navbar-inverse .navbar-inner {
+
+/* NAVBAR
+   ----------------------------------------------------------- */
+.navbar-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin-top: 20px;
+    margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
+}
+
+.navbar-wrapper .container{
+    width: 1600px;
+}
+
+.navbar .navbar-inner {
     background-image: url("../images/grainyNavBar.jpg");
+    border: 0;
 }
 
-body > .navbar .brand {
-    font-weight: bold;
-    color: #000;
-    text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
-}
+
+/*
+   ----------------------------------------------------------- */
