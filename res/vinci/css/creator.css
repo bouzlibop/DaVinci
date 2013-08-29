@@ -1,0 +1,73 @@
+
+
+/* GENERAL
+   ----------------------------------------------------------- */
+body{
+    background: url("../../images/background/grainyDarkGray.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+/* NAVBAR
+   ----------------------------------------------------------- */
+.navbar-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin-top: 20px;
+    margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
+}
+
+.navbar-wrapper .container{
+    width: 1600px;
+}
+
+.navbar .navbar-inner {
+    background-image: url("../../images/grainyNavBar.jpg");
+    border: 0;
+}
+
+
+/* CAROUSEL
+   ----------------------------------------------------------- */
+.carousel img {
+    min-width: 100%;
+    height: 400px;
+}
+
+.carousel-caption {
+    background-color: transparent;
+    max-width: 550px;
+}
+.carousel-caption h1,
+.carousel-caption .lead {
+    margin: 0;
+    line-height: 1.25;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+}
+.carousel-caption .btn {
+    margin-top: 10px;
+}
+
+
+/* CREATOR
+   ----------------------------------------------------------- */
+.workspace-wrapper{
+    position: absolute;
+    top: 0;
+    margin-top: 20px;
+    left: 0;
+    right: 0;
+}
+
+.workspace-wrapper .container{
+    width: 1600px;
+    height: 20px;
+    background-color:rgba(255,255,255,0.2);
+}
