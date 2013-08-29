@@ -2,53 +2,64 @@
 <html lang="en">
 
 
-<head>
+    <head>
 
-    <meta charset="utf-8">
-    <title>Da Vinci</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Web environment for 3D printing">
-    <meta name="author" content="Adrian Baran">
+        <meta charset="utf-8">
+        <title>Da Vinci</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Web environment for 3D printing">
+        <meta name="author" content="Adrian Baran">
 
-    <script src="../res/js/jquery-2.0.3.js"></script>
+        <script src="../res/vinci/js/jquery-2.0.3.js"></script>
+        <script src="../res/vinci/js/creator.js"></script>
 
-    <link href="../res/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-    <link href="../res/css/index.css" rel="stylesheet" media="screen">
+        <script src="../res/three/js/three.js"></script>
+        <script src="../res/three/js/Detector.js"></script>
+        <script src="../res/three/js/libs/stats.min.js"></script>
+        <script src="../res/three/js/controls/TrackballControls.js"></script>
 
-</head>
+        <link href="../res/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+        <link href="../res/vinci/css/creator.css" rel="stylesheet" media="screen">
+
+    </head>
 
 
-<body>
+    <body>
 
 
-<div class="navbar-wrapper">
-    <div class="container">
-        <div class="navbar navbar-inverse navbar-static-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <div class="row-fluid">
-                        <div class="span2">
-                            <a href="#"><img src="../res/images/logo3.png" style="padding-top: 2px; padding-right: 10px; float: left"></a>
-                            <a class="brand" href="#">Da Vinci</a>
-                        </div>
-                        <div class="span10">
-                            <ul class="nav nav-pills pull-right">
-                                <li><a href="file:///E:/dev/DaVinci/src/index.html">Home</a></li>
-                                <li><a href="file:///E:/dev/DaVinci/src/shop.html">Shop</a></li>
-                                <li class="active"><a href="file:///E:/dev/DaVinci/src/creator.html">Creator</a></li>
-                                <li><a href="file:///E:/dev/DaVinci/src/about.html">About</a></li>
-                            </ul>
+        <div class="navbar-wrapper">
+            <div class="container">
+                <div class="navbar navbar-inverse navbar-static-top">
+                    <div class="navbar-inner">
+                        <div class="container-fluid">
+                            <div class="row-fluid">
+                                <div class="span2">
+                                    <a href="#"><img src="../res/images/logo3.png" style="padding-top: 2px; padding-right: 10px; float: left"></a>
+                                    <a class="brand" href="#">Da Vinci</a>
+                                </div>
+                            <div class="span10">
+                                <ul class="nav nav-pills pull-right">
+                                    <li><a href="file:///C:/dev/DaVinci/src/index.html">Home</a></li>
+                                    <li><a href="file:///E:/dev/DaVinci/src/shop.html">Shop</a></li>
+                                    <li class="active"><a href="file:///C:/dev/DaVinci/src/creator.html">Creator</a></li>
+                                    <li><a href="file:///E:/dev/DaVinci/src/about.html">About</a></li>
+                                </ul>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 
+        <div class="workspace-wrapper">
+            <div id="workspace" class="container">
+            </div>
+        </div>
 
-</body>
+
+    </body>
 
 
 </html>
