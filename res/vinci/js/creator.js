@@ -1,29 +1,88 @@
 $(document).ready(function() {
-    $( "#workspace" ).animate({height: "900px"}, 3000, function(){
-        init();
+
+
+    var camera, scene, renderer, geometry, material, mesh, stats, controls;
+
+    $( "#workspace" ).animate( {height: "900px"}, 1000, function(){ startCreator() });
+
+    function startCreator(){
+        initialize();
         animate();
-    });
+    }
 
-    var camera, scene, renderer, geometry, material, mesh;
+    function initialize() {
 
-    function init() {
+        var SCREEN_WIDTH = $("#workspace").width();
+        var SCREEN_HEIGHT = $("#workspace").height();
+        var FOV = 50;
+        var ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+        var NEAR = 1;
+        var FAR = 10000;
 
         scene = new THREE.Scene();
 
-        camera = new THREE.PerspectiveCamera(50, $("#workspace").width()/$("#workspace").height(), 1, 10000);
-        camera.position.z = 500;
+        setUpAndAddCamera(FOV, ASPECT, NEAR, FAR);
+
+        createAndStartRenderer(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+        appendStats();
+
+        setUpAndAddFloor();
+
+    }
+
+    function appendStats(){
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.bottom = '0px';
+        stats.domElement.style.zIndex = 100;
+        container.appendChild( stats.domElement );
+    }
+
+    function setUpAndAddCamera(fov, aspect, near, far){
+
+        camera = new THREE.PerspectiveCamera( fov, aspect, near, far);
+        camera.position.set(0,-500,500);
+        camera.lookAt(scene.position);
         scene.add(camera);
 
-        geometry = new THREE.CubeGeometry(200, 200, 200);
-        material = new THREE.MeshNormalMaterial();
+    }
 
-        mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
+    function createAndStartRenderer(screenWidth, screenHeight){
 
-        renderer = new THREE.CanvasRenderer();
-        renderer.setSize($("#workspace").width(), $("#workspace").height());
+        if ( Detector.webgl )
+            renderer = new THREE.WebGLRenderer( {antialias:true} );
+        else
+            renderer = new THREE.CanvasRenderer();
 
-        document.body.appendChild(renderer.domElement);
+        renderer.setSize(screenWidth, screenHeight);
+
+        container = document.getElementById( 'workspace' );
+        container.appendChild( renderer.domElement );
+
+    }
+
+    function setUpAndAddFloor(){
+
+        //TEXTURE
+/*
+        var floorTexture = new THREE.ImageUtils.loadTexture( "../res/images/textures/checkerboard.jpg" );
+        floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+        floorTexture.repeat.set( 16, 16);
+        var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+        var floorGeometry = new THREE.PlaneGeometry(500, 500, 1, 1);
+*/
+
+        //WIREFRAME
+        var floorMaterial = new THREE.MeshBasicMaterial( { color: 0xFFEBBD, wireframe: true, side: THREE.DoubleSide } );
+        var floorGeometry = new THREE.PlaneGeometry(500,500,50,50);
+
+        var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.position.z = -100;
+
+        scene.add(floor);
 
     }
 
@@ -31,16 +90,16 @@ $(document).ready(function() {
 
         requestAnimationFrame(animate);
         render();
+        controls.update();
+        stats.update();
 
     }
 
     function render() {
 
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.02;
-
         renderer.render(scene, camera);
 
     }
+
 
 });
