@@ -11,7 +11,9 @@
         <meta name="author" content="Adrian Baran">
 
         <script src="../res/vinci/js/jquery-2.0.3.js"></script>
+        <script src="../res/vinci/js/dat.gui.js"></script>
         <script src="../res/vinci/js/creator.js"></script>
+        <script src="../res/bootstrap/js/bootstrap.js"></script>
 
         <script src="../res/three/js/three.js"></script>
         <script src="../res/three/js/Detector.js"></script>
@@ -55,7 +57,38 @@
 
 
         <div class="workspace-wrapper">
-            <div id="workspace" class="container"></div>
+            <div class="container">
+                <div id="workspace-menu-bar">
+                    <ul class="nav nav-tabs">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle"
+                               data-toggle="dropdown"
+                               href="#">
+                                File
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>Open</li>
+                                <li id="new">New</li>
+                                <li>Save</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="workspace-basic-tools">
+                    <img src="../res/images/icons/primitiveFigure_cylinder.png" style="padding-top: 20px;">
+                    <div id="primitiveFigure_cube"><img src="../res/images/icons/primitiveFigure_cube.png" style="padding-top: 20px;"></div>
+                    <img src="../res/images/icons/primitiveFigure_sphere.png" style="padding-top: 20px;">
+                    <img src="../res/images/icons/primitiveFigure_triangle.png" style="padding-top: 20px;">
+                    <img src="../res/images/icons/primitiveFigure_cone.png" style="padding-top: 20px;">
+                    <img src="../res/images/icons/cup.png" style="padding-top: 20px;">
+                </div>
+                <div id="workspace-container"></div>
+                <div id="workspace-object-properties"></div>
+                <div id="workspace-info">
+                    <div id="camera-position"></div>
+                </div>
+            </div>
         </div>
 
 

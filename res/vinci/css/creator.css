@@ -1,5 +1,3 @@
-
-
 /* GENERAL
    ----------------------------------------------------------- */
 body{
@@ -32,42 +30,55 @@ body{
     border: 0;
 }
 
-
-/* CAROUSEL
-   ----------------------------------------------------------- */
-.carousel img {
-    min-width: 100%;
-    height: 400px;
-}
-
-.carousel-caption {
-    background-color: transparent;
-    max-width: 550px;
-}
-.carousel-caption h1,
-.carousel-caption .lead {
-    margin: 0;
-    line-height: 1.25;
-    color: #fff;
-    text-shadow: 0 1px 1px rgba(0,0,0,.4);
-}
-.carousel-caption .btn {
-    margin-top: 10px;
-}
-
-
 /* CREATOR
    ----------------------------------------------------------- */
 .workspace-wrapper{
     position: absolute;
     top: 0;
-    margin-top: 20px;
+    margin-top: 58px;
     left: 0;
     right: 0;
 }
 
 .workspace-wrapper .container{
     width: 1600px;
-    height: 20px;
+}
+
+.workspace-wrapper #workspace-menu-bar{
+    height: 0px;
+    width: 1305px;
+    margin-left: 50px;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.workspace-wrapper #workspace-basic-tools{
+    float:left;
+    width: 50px;
+    height: 0px;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.workspace-wrapper #workspace-container{
+    float: left;
+    height: 0px;
+    width: 1305px;
     background-color:rgba(255,255,255,0.2);
+}
+
+
+.workspace-wrapper #workspace-object-properties{
+    height: 0px;
+    width: 245px;
+    float: right;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.workspace-wrapper #workspace-info{
+    text-align: right;
+    color: white;
+    height: 20px;
+    width: 1305px;
+    float: left;
+    margin-left: 50px;
+    background-color: rgba(0,0,0,0.5);
 }
