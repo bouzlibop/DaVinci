@@ -1,7 +1,12 @@
 $(document).ready(function() {
 
 
-    var camera, scene, renderer, geometry, material, mesh, stats, controls;
+    var camera, scene, renderer, geometry, material, mesh, stats, controls, projector;
+
+    var objects = [];
+    var moveControl = [];
+
+    var cube;
 
     $( "#workspace-container" ).animate( {height: "800px"}, 2000, function(){ startCreator() });
     $( "#workspace-menu-bar" ).animate( {height: "38px"}, 2000, function(){});
@@ -23,6 +28,8 @@ $(document).ready(function() {
         var FAR = 10000;
 
         scene = new THREE.Scene();
+
+        projector = new THREE.Projector();
 
         setUpAndAddCamera(FOV, ASPECT, NEAR, FAR);
 
@@ -61,12 +68,14 @@ $(document).ready(function() {
             renderer = new THREE.WebGLRenderer( {antialias:true} );
         else
             renderer = new THREE.CanvasRenderer();
-
+        renderer.sortObjects = false;
         renderer.setSize(screenWidth, screenHeight);
-
+        renderer.shadowMapEnabled = true;
+        renderer.shadowMapType = THREE.PCFShadowMap;
         container = document.getElementById( 'workspace-container' );
         container.appendChild( renderer.domElement );
 
+        document.addEventListener( 'mousedown', onDocumentMouseDown, false );
     }
 
     function setUpAndAddFloor(){
@@ -84,7 +93,7 @@ $(document).ready(function() {
         var floorMaterial = new THREE.MeshBasicMaterial( { color: 0xFFEBBD, wireframe: true, side: THREE.DoubleSide } );
         var floorGeometry = new THREE.PlaneGeometry(500,500,50,50);
 
-        var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.position.z = -100;
 
         scene.add(floor);
@@ -93,54 +102,57 @@ $(document).ready(function() {
 
     function setUpAndAddGUI(){
 
-        var gui = new dat.GUI({
-            height : 10 * 32 - 1
-        });
+        gui = new dat.GUI();
 
-        var parameters =
+        gui.domElement.style.marginRight='0px';
+        document.getElementById("workspace-object-properties").appendChild(gui.domElement);
+
+        parameters =
         {
-            a: 200, // numeric
-            b: 200, // numeric slider
-            c: "Hello, GUI!", // string
-            d: false, // boolean (checkbox)
-            e: "#ff8800", // color (hex)
-            f: function() { alert("Hello!") },
-            g: function() { alert( parameters.c ) },
-            v : 0,    // dummy value, only type is important
-            w: "...", // dummy value, only type is important
-            x: 0, y: 0, z: 0
+            x: 0, y: 30, z: 0,
+            color: "#ff0000", // color (change "#" to "0x")
+            opacity: 1,
+            visible: true,
+            reset: function() {
+                $('#workspace-container').empty();
+                $('#workspace-object-properties').empty();
+                startCreator();
+            }
         };
-        // gui.add( parameters )
-        gui.add( parameters, 'a' ).name('Number');
-        gui.add( parameters, 'b' ).min(128).max(256).step(16).name('Slider');
-        gui.add( parameters, 'c' ).name('String');
-        gui.add( parameters, 'd' ).name('Boolean');
 
-        gui.addColor( parameters, 'e' ).name('Color');
+        var folder1 = gui.addFolder('Position');
+        var cubeX = folder1.add( parameters, 'x' ).min(-200).max(200).step(1).listen();
+        var cubeY = folder1.add( parameters, 'y' ).min(0).max(100).step(1).listen();
+        var cubeZ = folder1.add( parameters, 'z' ).min(-200).max(200).step(1).listen();
+        folder1.open();
 
-        var numberList = [1, 2, 3];
-        gui.add( parameters, 'v', numberList ).name('List');
+        cubeX.onChange(function(value)
+        {   cube.position.x = value;   });
+        cubeY.onChange(function(value)
+        {   cube.position.y = value;   });
+        cubeZ.onChange(function(value)
+        {   cube.position.z = value;   });
 
-        var stringList = ["One", "Two", "Three"];
-        gui.add( parameters, 'w', stringList ).name('List');
+        var cubeColor = gui.addColor( parameters, 'color' ).name('Color').listen();
+        cubeColor.onChange(function(value) // onFinishChange
+        {   cube.material.color.setHex( value.replace("#", "0x") );   });
 
-        gui.add( parameters, 'f' ).name('Say "Hello!"');
-        gui.add( parameters, 'g' ).name("Alert Message");
+        var cubeOpacity = gui.add( parameters, 'opacity' ).min(0).max(1).step(0.01).name('Opacity').listen();
+        cubeOpacity.onChange(function(value)
+        {   cube.material.opacity = value;   });
 
-        var folder1 = gui.addFolder('Coordinates');
-        folder1.add( parameters, 'x' );
-        folder1.add( parameters, 'y' );
-        folder1.close();
+        var cubeVisible = gui.add( parameters, 'visible' ).name('Visible?').listen();
+        cubeVisible.onChange(function(value)
+        {   cube.visible = value;  	});
+
+        gui.add( parameters, 'reset' ).name("Reset Cube Parameters");
 
 //        gui.domElement.style.position = 'absolute';
 //        gui.domElement.style.top = '20px';
 //        gui.domElement.style.left='20px';
 //        gui.domElement.style.zIndex = 100;
-        gui.domElement.style.marginRight='0px';
-        document.getElementById("workspace-object-properties").appendChild(gui.domElement);
 
         gui.open();
-
     }
 
     function animate() {
@@ -155,6 +167,12 @@ $(document).ready(function() {
 
     function render() {
 
+        for ( var i = 0, j = moveControl.length; i < j; i ++ ) {
+
+            moveControl[ i ].update();
+
+        }
+
         renderer.render(scene, camera);
 
     }
@@ -162,11 +180,21 @@ $(document).ready(function() {
     $('#primitiveFigure_cube').on("click", "img", function () {
 
         var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: true, side: THREE.DoubleSide } );
-        var cubeGeometry = new THREE.CubeGeometry(500,500,500,50,50,50);
+        var cubeGeometry = new THREE.CubeGeometry(100,100,100,5,5,5);
 
-        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+        objects.push(cube);
 
         scene.add(cube);
+
+        var control = new THREE.TransformControls( camera, renderer.domElement );
+        control.addEventListener( 'change', render );
+        control.attach( cube );
+        control.scale = 0.65;
+        scene.add( control.gizmo );
+
+        moveControl.push( control );
 
     });
 
@@ -175,5 +203,29 @@ $(document).ready(function() {
         $('#workspace-object-properties').empty();
         startCreator();
     });
+
+    function onDocumentMouseDown(event){
+
+        event.preventDefault();
+
+        if ( event.button === 0 ){
+
+
+            var vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
+            projector.unprojectVector(vector, camera);
+
+            var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+
+            var intersects = raycaster.intersectObjects(objects);
+
+            if(intersects.length>0){
+
+                intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
+
+            }
+
+        }
+
+    }
 
 });
