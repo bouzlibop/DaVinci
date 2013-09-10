@@ -1,12 +1,12 @@
 $(document).ready(function() {
 
 
-    var camera, scene, renderer, geometry, material, mesh, stats, controls, projector;
+    var camera, scene, renderer, geometry, material, mesh, stats, controls, projector, light;
 
     var objects = [];
     var moveControl = [];
 
-    var cube;
+    var cube, cap;
 
     $( "#workspace-container" ).animate( {height: "800px"}, 2000, function(){ startCreator() });
     $( "#workspace-menu-bar" ).animate( {height: "38px"}, 2000, function(){});
@@ -34,6 +34,10 @@ $(document).ready(function() {
         setUpAndAddCamera(FOV, ASPECT, NEAR, FAR);
 
         createAndStartRenderer(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        light = new THREE.PointLight(0xFFFFFF);
+        light.position.set(100,100,0);
+        scene.add(light);
 
         controls = new THREE.OrbitControls( camera, renderer.domElement );
 
@@ -192,6 +196,49 @@ $(document).ready(function() {
         control.addEventListener( 'change', render );
         control.attach( cube );
         control.scale = 0.65;
+        scene.add( control.gizmo );
+
+        moveControl.push( control );
+
+    });
+
+    $('#cup').on("click", "img", function () {
+
+        var cupMaterial = new THREE.MeshLambertMaterial( { color: 0xFFFFFF, side: THREE.DoubleSide } );
+        var cupGeometry = new THREE.CylinderGeometry(100, 100, 200, 34);
+        var cupMaterial2 = new THREE.MeshLambertMaterial( { color: 0xFFFF00, side: THREE.DoubleSide } );
+        var cupGeometry2 = new THREE.CylinderGeometry(80, 80, 200, 34);
+
+        var cylinder = new THREE.Mesh(cupGeometry);
+        cylinder.rotation.x = 90 * Math.PI/180;
+        var cylinder2 = new THREE.Mesh(cupGeometry2);
+        cylinder2.rotation.x = 90 * Math.PI/180;
+
+        var holder = new THREE.Mesh( new THREE.TorusGeometry( 50, 20, 20, 20 ));
+        holder.rotation.x = 90 * Math.PI/180;
+        holder.position.set( 100, 0, 0 );
+
+        var cyl1_bsp = new ThreeBSP( cylinder );
+        var cyl2_bsp = new ThreeBSP( cylinder2 );
+        var holder_bsp = new ThreeBSP(holder);
+        var subtract_bsp = cyl1_bsp.subtract( cyl2_bsp );
+        var subtract_bsp2 = holder_bsp.subtract(cyl1_bsp);
+        var result = subtract_bsp.toMesh(new THREE.MeshLambertMaterial( { color: 0xFF0000 } ) );
+        var result2 = subtract_bsp2.toMesh(new THREE.MeshLambertMaterial( { color: 0xFF0000 } ) );
+        result.geometry.computeVertexNormals();
+        result2.geometry.computeVertexNormals();
+
+
+        cup = new THREE.Object3D();
+        cup.add(result);
+        cup.add(result2);
+        objects.push(cup);
+        scene.add(cup);
+
+        var control = new THREE.TransformControls( camera, renderer.domElement );
+        control.addEventListener( 'change', render );
+        control.attach( cup );
+        control.scale = 1;
         scene.add( control.gizmo );
 
         moveControl.push( control );
