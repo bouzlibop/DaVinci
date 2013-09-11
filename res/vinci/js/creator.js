@@ -6,7 +6,7 @@ $(document).ready(function() {
     var objects = [];
     var moveControl = [];
 
-    var cube, cap;
+    var cube, cup;
 
     $( "#workspace-container" ).animate( {height: "800px"}, 2000, function(){ startCreator() });
     $( "#workspace-menu-bar" ).animate( {height: "38px"}, 2000, function(){});
@@ -131,23 +131,40 @@ $(document).ready(function() {
         folder1.open();
 
         cubeX.onChange(function(value)
-        {   cube.position.x = value;   });
+        {
+            if(cube!=undefined) cube.position.x = value;
+            if(cup!=undefined)cup.position.x = value;
+        });
         cubeY.onChange(function(value)
-        {   cube.position.y = value;   });
+        {   if(cube!=undefined)cube.position.y = value;
+            if(cup!=undefined)cup.position.y = value;   });
         cubeZ.onChange(function(value)
-        {   cube.position.z = value;   });
+        { if(cube!=undefined)  cube.position.z = value;
+            if(cup!=undefined)cup.position.z = value;   });
 
         var cubeColor = gui.addColor( parameters, 'color' ).name('Color').listen();
         cubeColor.onChange(function(value) // onFinishChange
-        {   cube.material.color.setHex( value.replace("#", "0x") );   });
+        {
+            if(cube!=undefined)cube.material.color.setHex( value.replace("#", "0x") );
+            if(cup!=undefined)cup.children[0].material.color.setHex( value.replace("#", "0x") );
+            if(cup!=undefined)cup.children[1].material.color.setHex( value.replace("#", "0x") );
+        });
 
         var cubeOpacity = gui.add( parameters, 'opacity' ).min(0).max(1).step(0.01).name('Opacity').listen();
         cubeOpacity.onChange(function(value)
-        {   cube.material.opacity = value;   });
+        {
+            if(cube!=undefined)cube.material.opacity = value;
+            if(cup!=undefined)cup.children[0].material.opacity = value;
+            if(cup!=undefined)cup.children[1].material.opacity = value;
+        });
 
         var cubeVisible = gui.add( parameters, 'visible' ).name('Visible?').listen();
         cubeVisible.onChange(function(value)
-        {   cube.visible = value;  	});
+        {
+            if(cube!=undefined)cube.visible = value;
+            if(cup!=undefined)cup.children[0].visible = value;
+            if(cup!=undefined)cup.children[1].visible = value;
+        });
 
         gui.add( parameters, 'reset' ).name("Reset Cube Parameters");
 
@@ -211,8 +228,11 @@ $(document).ready(function() {
 
         var cylinder = new THREE.Mesh(cupGeometry);
         cylinder.rotation.x = 90 * Math.PI/180;
+
         var cylinder2 = new THREE.Mesh(cupGeometry2);
+        cylinder2.position.z = 20;
         cylinder2.rotation.x = 90 * Math.PI/180;
+
 
         var holder = new THREE.Mesh( new THREE.TorusGeometry( 50, 20, 20, 20 ));
         holder.rotation.x = 90 * Math.PI/180;
