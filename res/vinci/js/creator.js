@@ -35,8 +35,8 @@ $(document).ready(function() {
 
         createAndStartRenderer(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        light = new THREE.PointLight(0xFFFFFF);
-        light.position.set(100,100,0);
+        light = new THREE.HemisphereLight(0xFFFFFF, 0x000000);
+        light.position.set(100,200,0);
         scene.add(light);
 
         controls = new THREE.OrbitControls( camera, renderer.domElement );
@@ -114,6 +114,9 @@ $(document).ready(function() {
         parameters =
         {
             x: 0, y: 30, z: 0,
+            width: 0,
+            height: 0,
+            thickness: 2,
             color: "#ff0000", // color (change "#" to "0x")
             opacity: 1,
             visible: true,
@@ -124,11 +127,18 @@ $(document).ready(function() {
             }
         };
 
-        var folder1 = gui.addFolder('Position');
+        var folder1 = gui.addFolder('Cup Position');
+        var folder2 = gui.addFolder('Cup Holder Position');
+        var folder3 = gui.addFolder('Others');
         var cubeX = folder1.add( parameters, 'x' ).min(-200).max(200).step(1).listen();
         var cubeY = folder1.add( parameters, 'y' ).min(0).max(100).step(1).listen();
         var cubeZ = folder1.add( parameters, 'z' ).min(-200).max(200).step(1).listen();
         folder1.open();
+        var width = folder2.add( parameters, 'width' ).min(30).max(100).step(1).listen();
+        var height = folder2.add( parameters, 'height' ).min(0).max(100).step(1).listen();
+        var thickness = folder2.add(parameters, 'thickness').min(2).max(50).step(1).listen();
+        folder2.open();
+        folder3.open();
 
         cubeX.onChange(function(value)
         {
@@ -142,7 +152,7 @@ $(document).ready(function() {
         { if(cube!=undefined)  cube.position.z = value;
             if(cup!=undefined)cup.position.z = value;   });
 
-        var cubeColor = gui.addColor( parameters, 'color' ).name('Color').listen();
+        var cubeColor = folder3.addColor( parameters, 'color' ).name('Color').listen();
         cubeColor.onChange(function(value) // onFinishChange
         {
             if(cube!=undefined)cube.material.color.setHex( value.replace("#", "0x") );
@@ -150,7 +160,7 @@ $(document).ready(function() {
             if(cup!=undefined)cup.children[1].material.color.setHex( value.replace("#", "0x") );
         });
 
-        var cubeOpacity = gui.add( parameters, 'opacity' ).min(0).max(1).step(0.01).name('Opacity').listen();
+        var cubeOpacity = folder3.add( parameters, 'opacity' ).min(0).max(1).step(0.01).name('Opacity').listen();
         cubeOpacity.onChange(function(value)
         {
             if(cube!=undefined)cube.material.opacity = value;
@@ -158,7 +168,7 @@ $(document).ready(function() {
             if(cup!=undefined)cup.children[1].material.opacity = value;
         });
 
-        var cubeVisible = gui.add( parameters, 'visible' ).name('Visible?').listen();
+        var cubeVisible = folder3.add( parameters, 'visible' ).name('Visible?').listen();
         cubeVisible.onChange(function(value)
         {
             if(cube!=undefined)cube.visible = value;
@@ -166,7 +176,13 @@ $(document).ready(function() {
             if(cup!=undefined)cup.children[1].visible = value;
         });
 
-        gui.add( parameters, 'reset' ).name("Reset Cube Parameters");
+        folder3.add( parameters, 'reset' ).name("Reset");
+
+        thickness.onChange(function(value)
+        {
+            if(cube!=undefined) cube.position.x = value;
+        });
+
 
 //        gui.domElement.style.position = 'absolute';
 //        gui.domElement.style.top = '20px';
@@ -200,7 +216,7 @@ $(document).ready(function() {
 
     $('#primitiveFigure_cube').on("click", "img", function () {
 
-        var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: true, side: THREE.DoubleSide } );
+        var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: false, side: THREE.DoubleSide } );
         var cubeGeometry = new THREE.CubeGeometry(100,100,100,5,5,5);
 
         cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -234,7 +250,7 @@ $(document).ready(function() {
         cylinder2.rotation.x = 90 * Math.PI/180;
 
 
-        var holder = new THREE.Mesh( new THREE.TorusGeometry( 50, 20, 20, 20 ));
+        var holder = new THREE.Mesh( new THREE.TorusGeometry( 50, 5, 20, 20 ));
         holder.rotation.x = 90 * Math.PI/180;
         holder.position.set( 100, 0, 0 );
 

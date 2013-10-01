@@ -29,7 +29,7 @@ THREE.OrbitControls = function ( object, domElement ) {
     this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
 
     this.minPolarAngle = 0; // radians
-    this.maxPolarAngle = Math.PI; // radians
+    this.maxPolarAngle = Infinity//Math.PI; // radians
 
     this.minDistance = 0;
     this.maxDistance = Infinity;
@@ -311,6 +311,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 
              scope.rotateLeft( 2 * Math.PI * rotateDelta.x / PIXELS_PER_ROUND * scope.userRotateSpeed );
              scope.rotateUp( 2 * Math.PI * rotateDelta.y / PIXELS_PER_ROUND * scope.userRotateSpeed );
+
+
 
              rotateStart.copy( rotateEnd );
 
