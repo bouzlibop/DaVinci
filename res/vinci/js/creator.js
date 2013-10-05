@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 
-    var camera, scene, renderer, geometry, material, mesh, stats, controls, projector, light;
+    var camera, scene, renderer, geometry, material, mesh, stats, controls, projector, light, control, parameters;
 
     var objects = [];
     var moveControl = [];
@@ -114,10 +114,9 @@ $(document).ready(function() {
         parameters =
         {
             x: 0, y: 30, z: 0,
-            width: 0,
-            height: 0,
-            thickness: 2,
-            color: "#ff0000", // color (change "#" to "0x")
+            widthh: 40,
+            thickness: 5,
+            color: '0xd00000', // color (change "#" to "0x")
             opacity: 1,
             visible: true,
             reset: function() {
@@ -134,9 +133,8 @@ $(document).ready(function() {
         var cubeY = folder1.add( parameters, 'y' ).min(0).max(100).step(1).listen();
         var cubeZ = folder1.add( parameters, 'z' ).min(-200).max(200).step(1).listen();
         folder1.open();
-        var width = folder2.add( parameters, 'width' ).min(30).max(100).step(1).listen();
-        var height = folder2.add( parameters, 'height' ).min(0).max(100).step(1).listen();
-        var thickness = folder2.add(parameters, 'thickness').min(2).max(50).step(1).listen();
+        var widthh = folder2.add( parameters, 'widthh', {'20':20,'30':30,'40':40,'50':50,'60':60}).listen();
+        var thickness = folder2.add( parameters, 'thickness', {'5':5, '10':10, '15':15, '20':20, '25':25}).listen();
         folder2.open();
         folder3.open();
 
@@ -152,13 +150,23 @@ $(document).ready(function() {
         { if(cube!=undefined)  cube.position.z = value;
             if(cup!=undefined)cup.position.z = value;   });
 
-        var cubeColor = folder3.addColor( parameters, 'color' ).name('Color').listen();
+
+        var cubeColor = folder3.add(parameters, 'color', { 'red': '0xd00000', 'green': '0x00d00f', 'blue':'0x0056ff', 'yellow':'0xff9e00'}).listen();
+        cubeColor.onChange(function(value)
+        {
+
+            if(cube!=undefined)cube.material.color.setHex( value );
+            if(cup!=undefined)cup.children[0].material.color.setHex( value );
+            if(cup!=undefined)cup.children[1].material.color.setHex( value );
+
+        });
+        /*folder3.addColor( parameters, 'color' ).name('Color').listen();
         cubeColor.onChange(function(value) // onFinishChange
         {
             if(cube!=undefined)cube.material.color.setHex( value.replace("#", "0x") );
             if(cup!=undefined)cup.children[0].material.color.setHex( value.replace("#", "0x") );
             if(cup!=undefined)cup.children[1].material.color.setHex( value.replace("#", "0x") );
-        });
+        });*/
 
         var cubeOpacity = folder3.add( parameters, 'opacity' ).min(0).max(1).step(0.01).name('Opacity').listen();
         cubeOpacity.onChange(function(value)
@@ -180,7 +188,113 @@ $(document).ready(function() {
 
         thickness.onChange(function(value)
         {
-            if(cube!=undefined) cube.position.x = value;
+            if(cup!=undefined){
+
+                scene.remove(control.gizmo);
+                moveControl.pop();
+                scene.remove(cup);
+
+                var cupMaterial = new THREE.MeshLambertMaterial( { color: 0xFFFFFF, side: THREE.DoubleSide } );
+                var cupGeometry = new THREE.CylinderGeometry(100, 100, 200, 34);
+                var cupMaterial2 = new THREE.MeshLambertMaterial( { color: 0xFFFF00, side: THREE.DoubleSide } );
+                var cupGeometry2 = new THREE.CylinderGeometry(80, 80, 200, 34);
+
+                var cylinder = new THREE.Mesh(cupGeometry);
+                cylinder.rotation.x = 90 * Math.PI/180;
+
+                var cylinder2 = new THREE.Mesh(cupGeometry2);
+                cylinder2.position.z = 20;
+                cylinder2.rotation.x = 90 * Math.PI/180;
+
+                var holderGeometry = new THREE.TorusGeometry( parseInt(parameters.widthh), value, 20, 20 );
+                var holder = new THREE.Mesh(holderGeometry );
+                holder.rotation.x = 90 * Math.PI/180;
+                holder.position.set( 100, 0, 0 );
+
+                var cyl1_bsp = new ThreeBSP( cylinder );
+                var cyl2_bsp = new ThreeBSP( cylinder2 );
+                var holder_bsp = new ThreeBSP(holder);
+                var subtract_bsp = cyl1_bsp.subtract( cyl2_bsp );
+                var subtract_bsp2 = holder_bsp.subtract(cyl1_bsp);
+                var result = subtract_bsp.toMesh(new THREE.MeshLambertMaterial( { color: 0xFF0000 } ) );
+                var result2 = subtract_bsp2.toMesh(new THREE.MeshLambertMaterial( { color: 0xFF0000 } ) );
+                result.geometry.computeVertexNormals();
+                result2.geometry.computeVertexNormals();
+
+
+                cup = new THREE.Object3D();
+                cup.add(result);
+                cup.add(result2);
+                objects.push(cup);
+                scene.add(cup);
+
+                control = new THREE.TransformControls( camera, renderer.domElement );
+                control.addEventListener( 'change', render );
+                control.attach( cup );
+                control.scale = 1;
+                scene.add( control.gizmo );
+
+                moveControl.push( control );
+            }
+
+
+
+        });
+
+        widthh.onChange(function(value)
+        {
+            if(cup!=undefined){
+
+                scene.remove(control.gizmo);
+                moveControl.pop();
+                scene.remove(cup);
+
+                var cupMaterial = new THREE.MeshLambertMaterial( { color: 0xFFFFFF, side: THREE.DoubleSide } );
+                var cupGeometry = new THREE.CylinderGeometry(100, 100, 200, 34);
+                var cupMaterial2 = new THREE.MeshLambertMaterial( { color: 0xFFFF00, side: THREE.DoubleSide } );
+                var cupGeometry2 = new THREE.CylinderGeometry(80, 80, 200, 34);
+
+                var cylinder = new THREE.Mesh(cupGeometry);
+                cylinder.rotation.x = 90 * Math.PI/180;
+
+                var cylinder2 = new THREE.Mesh(cupGeometry2);
+                cylinder2.position.z = 20;
+                cylinder2.rotation.x = 90 * Math.PI/180;
+
+
+                var holderGeometry = new THREE.TorusGeometry( parseInt(value), parameters.thickness, 20, 20 );
+                var holder = new THREE.Mesh(holderGeometry );
+                holder.rotation.x = 90 * Math.PI/180;
+                holder.position.set( 100, 0, 0 );
+
+                var cyl1_bsp = new ThreeBSP( cylinder );
+                var cyl2_bsp = new ThreeBSP( cylinder2 );
+                var holder_bsp = new ThreeBSP(holder);
+                var subtract_bsp = cyl1_bsp.subtract( cyl2_bsp );
+                var subtract_bsp2 = holder_bsp.subtract(cyl1_bsp);
+                var result = subtract_bsp.toMesh(new THREE.MeshLambertMaterial( { color: 0xFF0000 } ) );
+                var result2 = subtract_bsp2.toMesh(new THREE.MeshLambertMaterial( { color: 0xFF0000 } ) );
+                result.geometry.computeVertexNormals();
+                result2.geometry.computeVertexNormals();
+
+
+                cup = new THREE.Object3D();
+                cup.add(result);
+                cup.add(result2);
+                objects.push(cup);
+                scene.add(cup);
+
+                control = new THREE.TransformControls( camera, renderer.domElement );
+                control.addEventListener( 'change', render );
+                control.attach( cup );
+                control.scale = 1;
+                scene.add( control.gizmo );
+
+                moveControl.push( control );
+            }
+
+
+
         });
 
 
@@ -199,7 +313,7 @@ $(document).ready(function() {
         controls.update();
         stats.update();
         $('#camera-position').html("x: "+camera.position.x.toFixed(2)+" y: "+camera.position.y.toFixed(2)+" z: "+camera.position.z.toFixed(2));
-
+        if(cup!=undefined) $('#camera-position').html("Size: " + parseInt(cup.scale.x*cup.scale.y*cup.scale.z*6)+" Price: "+parseInt(cup.scale.x*cup.scale.y*cup.scale.z*6*2.3+" $"));
     }
 
     function render() {
@@ -250,7 +364,7 @@ $(document).ready(function() {
         cylinder2.rotation.x = 90 * Math.PI/180;
 
 
-        var holder = new THREE.Mesh( new THREE.TorusGeometry( 50, 5, 20, 20 ));
+        var holder = new THREE.Mesh( new THREE.TorusGeometry( 40, 5, 20, 20 ));
         holder.rotation.x = 90 * Math.PI/180;
         holder.position.set( 100, 0, 0 );
 
@@ -271,7 +385,7 @@ $(document).ready(function() {
         objects.push(cup);
         scene.add(cup);
 
-        var control = new THREE.TransformControls( camera, renderer.domElement );
+        control = new THREE.TransformControls( camera, renderer.domElement );
         control.addEventListener( 'change', render );
         control.attach( cup );
         control.scale = 1;
@@ -289,7 +403,7 @@ $(document).ready(function() {
 
     function onDocumentMouseDown(event){
 
-        event.preventDefault();
+//        event.preventDefault(); select don't work if that is enabled
 
         if ( event.button === 0 ){
 

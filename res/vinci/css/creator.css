@@ -8,6 +8,11 @@ body{
     background-size: cover;
 }
 
+select{
+    width: auto;
+    height: auto;
+    padding: 0px;
+}
 
 /* NAVBAR
    ----------------------------------------------------------- */
